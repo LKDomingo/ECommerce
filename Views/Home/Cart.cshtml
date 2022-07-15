@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Cart | E-Store";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5><a class="me-2 lead" href="/dashboard">Dashboard</a> | <a class="mx-2 lead" href="/products">Products</a> |<span
+            class="mx-2 lead display-6">Cart</span> | <a class="mx-2 lead" href="/Members">Members</a> | <a
+            class="mx-2 lead" href="/Settings">Settings</a>
+    </h5>
+    <div><a href="/logout">Logout</a></div>
+</div>
+@if (ViewBag.User.OrderItems.Count == 0)
+{
+    <div class="mt-5">
+        <h1 class="text-center display-6">No Items in Cart</h1>
+        <div class="d-flex justify-content-center align-items-center"><a href="/products">Browse Products...</a></div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-9">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="min-width: 13rem;">Name</th>
+                        <th>Description</th>
+                        <th style="min-width: 6rem;"># In Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in ViewBag.User.OrderItems)
+                    {
+                        if (@p.Product.Quantity == 0)
+                        {
+                        <tr>
+                            <td><img style='height: 5rem; width: auto;' src="@p.Product.ImageURL" alt=""></td>
+                            <td>
+                                <h6>@p.Product.Name <span><h6 class="text-danger">(Out of Stock)</h6></span></h6>
+                            </td>
+                            <td>@p.Product.Description</td>
+                            <td class="text-center">@p.Product.Quantity</td>
+                            <td><a href="/Cart/RemoveFromCart/@p.ProductId" class="btn btn-danger my-1">Remove</a></td>
+                        </tr>
+                        } else {
+                        <tr>
+                            <td><img style='height: 5rem; width: auto;' src="@p.Product.ImageURL" alt=""></td>
+                            <td>
+                                <h6>@p.Product.Name</h6>
+                            </td>
+                            <td>@p.Product.Description</td>
+                            <td class="text-center">@p.Product.Quantity</td>
+                            <td><a href="/Cart/RemoveFromCart/@p.ProductId" class="btn btn-danger my-1">Remove</a></td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3 p-2" style="border-left: 3px solid lightgray;">
+                @{
+            <div>
+                <h4>Your Order</h4>
+                @{
+                    int Sum = 0;
+                    bool outOfStock = false;
+                    foreach (var p in ViewBag.User.OrderItems)
+                    {
+                        Sum += p.Product.Price;
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p>@p.Product.Name</p>
+                            <p>$ @p.Product.Price</p>
+                        </div>
+                        if(@p.Product.Quantity < 1)
+                        {
+                            outOfStock = true;
+                        }
+                    }
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6>Total</h6>
+                        <p>$ @Sum</p>
+                    </div>
+                }
+            </div>
+            if(outOfStock == true)
+            {
+                <p class="text-danger">One or more items are out of stock! Please remove them before submitting your cart.</p>
+            <div class="d-flex justify-content-end align-items-end mt-5">
+                <a href="/SubmitCart" class="btn btn-success disabled">Submit Order</a>
+            </div>
+            } else {
+            <div class="d-flex justify-content-end align-items-end mt-5">
+                <a href="/SubmitCart" class="btn btn-success">Submit Order</a>
+            </div>
+            }
+                }
+        </div>
+    </div>
+}

@@ -1,0 +1,107 @@
+@{
+    ViewData["Title"] = "Products | E-Store";
+}
+
+@model Product
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5><a class="me-2 lead" href="/dashboard">Dashboard</a> | <span class="mx-2 lead display-6">Products</span> | <a class="mx-2 lead" href='/Cart/@Context.Session.GetInt32("User")'>Cart</a> | <a class="mx-2 lead" href="/Members">Members</a> | <a class="mx-2 lead" href="/Settings">Settings</a></h5>
+    <div><a href="/logout">Logout</a></div>
+</div>
+<div class="row">
+    <div class="col-3 justify-content-start align-items-center">
+        @* <div class="d-flex justify-content-start align-items-center mb-5">
+            <form action="/filter" method="post" class="d-flex flex-column justify-content-center align-items-start">
+                <input class=" form-control mb-2" name="FilterSearch" type="text" placeholder="search...">
+                <input class="btn btn-warning px-3 py-1" type="submit" value="Filter">
+            </form>
+        </div> *@
+        <h5 class="mb-2">Add a new product</h5>
+        <partial name="_NewProductForm.cshtml"></partial>
+    </div>
+    <div class="col-9 d-flex gap-4 flex-wrap ">
+        @foreach (var p in @ViewBag.AllProducts)
+        {
+            <div class="card" style="width: 13rem; height: 19rem;">
+                    <div class="d-flex justify-content-center align-items-center p-1"
+                    style="width: auto; height: 12rem; overflow: hidden;"><a href="/product/@p.ProductId">
+                        <img class="card-img-top img-thumbnail"
+                            style="width: auto; height: auto;" src=@p.ImageURL alt=@p.Name>
+                    </a></div>
+                    <div class="card-body">
+                        <h6 class="card-title"><a href="/product/@p.ProductId">@p.Name</a></h6>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <p>$ @p.Price</p>
+                        </div>
+                        @if (@p.Quantity < 1)
+                        {
+                            <small class="text-danger"><br></small>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div class="d-flex justify-content-end">
+                                    <a href="" class="btn btn-danger my-1 disabled">Out of Stock</a>
+                                </div>
+                            </div>
+                        }
+                        else if (@p.Quantity <= 5)
+                        {
+                            <small class="text-danger">Only @p.Quantity left in stock!</small>
+                            <div class="d-flex justify-content-end align-items-center">
+                                @{
+                                    bool isFound = false;
+                                    foreach(var v in ViewBag.User.OrderItems)
+                                    {
+                                        if (v.Product.Name == p.Name)
+                                        {
+                                            isFound = true;
+                                            break;
+                                        }
+                                    }
+                                if (isFound)
+                                {
+                                <div class="d-flex justify-content-end">
+                                    <a href="/products/RemoveFromCart/@p.ProductId" class="btn btn-danger my-1">Remove from Order</a>
+                                </div>
+                                }
+                                else
+                                {
+                                <div class="d-flex justify-content-end">
+                                    <a href="/products/AddToCart/@p.ProductId" class="btn btn-primary my-1">Add to Order</a>
+                                </div>
+                                }
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <small><br></small>
+                            <div class="d-flex justify-content-end">
+                                @{
+                                    bool isFound = false;
+                                    foreach(var v in ViewBag.User.OrderItems)
+                                    {
+                                        if (v.Product.Name == p.Name)
+                                        {
+                                            isFound = true;
+                                            break;
+                                        }
+                                    }
+                                if (isFound)
+                                {
+                                <div class="d-flex justify-content-end">
+                                    <a href="/products/RemoveFromCart/@p.ProductId" class="btn btn-danger my-1">Remove from Order</a>
+                                </div>
+                                }
+                                else
+                                {
+                                <div class="d-flex justify-content-end">
+                                    <a href="/products/AddToCart/@p.ProductId" class="btn btn-primary my-1">Add to Order</a>
+                                </div>
+                                }
+                                }
+                            </div>
+                        } 
+                    </div>
+                </div>
+        }
+    </div>
+</div>

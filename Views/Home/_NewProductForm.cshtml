@@ -1,0 +1,32 @@
+@model Product
+
+<form action="/add/product" method="post">
+<div class="form-group d-flex flex-column justify-content-start align-items-start">
+<label>Name</label>
+<input class="form-control" asp-for="Name" placeholder="Name...">
+</div>
+<small><span asp-validation-for="Name" class="text-danger"></span></small>
+<div class="form-group d-flex flex-column justify-content-start align-items-start mt-3">
+<label>Image (url)</label>
+<input class="form-control" asp-for="ImageURL" placeholder="http://">
+</div>
+<small><span asp-validation-for="ImageURL" class="text-danger"></span></small>
+<div class="form-group d-flex flex-column justify-content-start align-items-start mt-3">
+<label>Description</label>
+<textarea class="form-control" asp-for="Description" cols="30" rows="4"></textarea>
+</div>
+<small><span asp-validation-for="Description" class="text-danger"></span></small>
+<div class="form-group d-flex flex-column justify-content-start align-items-start mt-3">
+<label>Price</label>
+<input class="form-control" placeholder="$" asp-for="Price" min="1">
+</div>
+<small><span asp-validation-for="Price" class="text-danger"></span></small>
+<div class="form-group d-flex flex-column justify-content-start align-items-start mt-3">
+<label>Initial Quantity</label>
+<input class="form-control" asp-for="Quantity" min="1">
+</div>
+<small><span asp-validation-for="Quantity" class="text-danger"></span></small>
+<div class="d-flex justify-content-start mt-4">
+    <input type="submit" value="Add Product" class="btn btn-primary">
+</div>
+</form>

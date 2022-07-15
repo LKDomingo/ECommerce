@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = $"{@Model.Name} | E-Store";
+}
+
+@model Product;
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5><a class="me-2 lead" href="/dashboard">Dashboard</a> | <a class="mx-2 lead" href="/products">Products</a> |<a
+            class="mx-2 lead" href='/Cart/@Context.Session.GetInt32("User")'>Cart</a> | <a class="mx-2 lead" href="/Members">Members</a> | <a
+            class="mx-2 lead" href="/Settings">Settings</a>
+    </h5>
+    <div><a href="/logout">Logout</a></div>
+</div>
+<div class="row">
+    <div class="col-3 justify-content-start align-items-center">
+        <h5 class="mb-2">Update Product</h5>
+        <partial name="_UpdateProductForm.cshtml"></partial>
+    </div>
+    <div class="col-9 d-flex gap-4 flex-wrap ">
+        <div>
+            <h1 class="display-5">@Model.Name - <strong class="display-6">$@Model.Price</strong></h1>
+            <div class="d-flex justify-content-start align-items-start">
+                <div>
+                    <img style="width: auto; height: 22rem;" src="@Model.ImageURL" alt="@Model.Name">
+                </div>
+                <div class="d-flex flex-column justify-content-between ms-2" style="height: 22rem; width: 100%;">
+                    <p>@Model.Description</p>
+                    <div class="d-flex justify-content-end ">
+                        @if (@Model.Quantity == 0)
+                        {
+                            <h5 class="text-danger">Out of Stock</h5>
+                        }
+                        else if (@Model.Quantity <= 5)
+                        {
+                            <h5 class="text-danger">Only @Model.Quantity left in Stock!</h5>
+                        }
+                        else
+                        {
+                            <h5>@Model.Quantity left in Stock</h5>
+                        }
+                    </div>
+                </div>
+            </div>
+                        <div class="d-flex justify-content-end align-items-center">
+                            @{
+                                    bool isFound = false;
+                                    foreach(var v in ViewBag.User.OrderItems)
+                                    {
+                                        if (v.Product.Name == @Model.Name)
+                                        {
+                                            isFound = true;
+                                            break;
+                                        }
+                                    }
+                                    
+                                if (isFound)
+                                {
+                                <div class="d-flex justify-content-end">
+                                    <a href="/product/RemoveFromCart/@Model.ProductId" class="btn btn-danger my-1">Remove from Order</a>
+                                </div>
+                                }
+                                else
+                                {
+                                <div class="d-flex justify-content-end">
+                                    <a href="/product/AddToCart/@Model.ProductId" class="btn btn-primary my-1">Add to Order</a>
+                                </div>
+                                }
+                                }
+                        </div>
+        </div>
+    </div>
+</div>

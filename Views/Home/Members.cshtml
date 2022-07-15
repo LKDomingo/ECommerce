@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Members | E-Store";
+}
+
+<div class="d-flex justify-content-start align-items-center mb-3">
+    <h5><a class="me-2 lead" href="/">Dashboard</a> | <a class="mx-2 lead" href="/products">Products</a> | <a class="mx-2 lead" href='/Cart/@Context.Session.GetInt32("User")'>Cart</a> | <span class="mx-2 lead display-6">Members</span> | <a class="mx-2 lead" href="/Settings">Settings</a></h5>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Current Cart Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var u in ViewBag.AllUsers)
+        {
+            <tr>
+                <td>@u.FirstName @u.LastName</td>
+                <td>@u.OrderItems.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>

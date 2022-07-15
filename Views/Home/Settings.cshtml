@@ -1,0 +1,8 @@
+@{
+    ViewData["Title"] = "Settings | E-Store";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5><a href="/dashboard" class="me-2 lead">Dashboard</a href="/dashboard"> | <a class="mx-2 lead" href="/products">Products</a> | <a class="mx-2 lead" href='/Cart/@Context.Session.GetInt32("User")'>Cart</a> | <a class="mx-2 lead" href="/Members">Members</a> | <span class="mx-2 display-6">Settings</span></h5>
+    <div><a href="/logout">Logout</a></div>
+</div>
